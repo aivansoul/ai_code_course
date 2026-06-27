@@ -198,6 +198,9 @@ body::before{
 .section h2{font-family:var(--pixel);font-size:15px;margin:0 0 16px;color:var(--ink);
   display:flex;align-items:center;gap:9px;letter-spacing:-.5px}
 .section h2 .hb{color:var(--heart);font-size:14px}
+.section h2 svg,.block-title svg,.cheat h3 svg{width:22px;height:22px;flex:0 0 auto}
+.fcard .fi svg{width:26px;height:26px}
+.footer .socials a svg{width:18px;height:18px}
 .section h3{margin:18px 0 6px;font-size:16px;font-weight:900;color:var(--ink)}
 .section p{color:var(--ink-soft);font-weight:600;margin:8px 0}
 .section ul,.section ol{color:var(--ink-soft);font-weight:600;padding-left:22px}

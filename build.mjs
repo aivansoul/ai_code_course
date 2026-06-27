@@ -1,6 +1,6 @@
 import { writeFileSync } from 'node:fs';
 import { ICONS, SOCIAL, HERO, px } from './sprites.mjs';
-import { MODULES, BONUS, CHEATS } from './content.mjs';
+import { MODULES, BONUS, CHEATS, PROMPTS } from './content.mjs';
 
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const icon = name => px(ICONS[name] || ICONS.star);
@@ -30,6 +30,7 @@ const topnav = active => `
   <nav class="nav-links">
     <a href="index.html">О курсе</a>
     <a href="index.html#modules">Модули</a>
+    <a href="prompts.html">Промпты</a>
     <a href="bonus.html">Бонусы</a>
     <a href="cheatsheet.html">Шпаргалка</a>
   </nav>
@@ -44,7 +45,8 @@ const sidebar = activeIdx => `
       ${MODULES.map((m,i)=>`<li><a href="${modFile(i)}" class="${i===activeIdx?'active':''} ${lockedOf(i)?'lock':''}"><span class="n">${id(i)}</span> ${esc(shortTitle(m.title))}</a></li>`).join('')}
     </ul>
     <div class="side-bonus">
-      <a href="bonus.html">&#127873; Бонусы</a>
+      <a href="prompts.html">&#128221; Промпты для бизнеса</a>
+      <a href="bonus.html" style="margin-top:8px">&#127873; Бонусы</a>
     </div>
   </div>
 </aside>`;
@@ -237,8 +239,48 @@ function buildCheatsheet(){
   writeFileSync('cheatsheet.html', html);
 }
 
+// ---------- PROMPTS LIBRARY ----------
+function buildPrompts(){
+  const anatomy = PROMPTS.anatomy.map(a=>`<div class="chip"><b>${esc(a.k)}</b> — ${esc(a.v)}</div>`).join('');
+  const groups = PROMPTS.groups.map(g=>`
+    <section class="section panel">
+      <h2>${px(ICONS[g.icon]||ICONS.star)} ${esc(g.group)}</h2>
+      ${g.items.map(it=>`<details><summary>${esc(it.title)}</summary><div class="detail">
+        <p style="margin-top:0"><b>Когда:</b> ${esc(it.when)}</p>
+        ${codeBlock({code:it.code})}
+      </div></details>`).join('')}
+    </section>`).join('');
+
+  const html = head('Промпты для бизнеса') + topnav('prompts.html') + `
+<main class="wrap"><div class="shell">
+  ${sidebar(-1)}
+  <div>
+    <div class="mod-head panel">
+      <div><span class="eyebrow">&#128221; Prompt Library</span><h1>${esc(PROMPTS.title)}</h1><p class="lead">${esc(PROMPTS.lead)}</p></div>
+      <div class="mod-art bob">${icon('chat')}</div>
+    </div>
+
+    <section class="section panel">
+      <h2><span class="hb">&#10073;</span> Анатомия модульного промпта</h2>
+      <p>Любой промпт ниже — конструктор из 5 блоков. Меняй значения в <b>[КВАДРАТНЫХ СКОБКАХ]</b> под свой бизнес, переставляй и комбинируй блоки.</p>
+      <div class="chips">${anatomy}</div>
+      <div class="note tip"><span class="ni">&#128161;</span><div>Подключай свои данные через <code class="inline">@файл.md</code> и MCP (модуль 13) — тогда Claude отвечает не «в общем», а про <b>твой</b> продукт.</div></div>
+    </section>
+
+    ${groups}
+
+    <nav class="pager">
+      <a class="prev" href="bonus.html"><span>&#8592; Назад</span>Бонусы</a>
+      <a class="next" href="cheatsheet.html"><span>Дальше &#8594;</span>Шпаргалка</a>
+    </nav>
+  </div>
+</div></main>` + footer;
+  writeFileSync('prompts.html', html);
+}
+
 buildIndex();
 buildModules();
 buildBonus();
+buildPrompts();
 buildCheatsheet();
-console.log(`Built index + ${MODULES.length} modules + bonus + cheatsheet`);
+console.log(`Built index + ${MODULES.length} modules + prompts + bonus + cheatsheet`);
