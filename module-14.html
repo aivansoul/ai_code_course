@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Автоматизация через n8n — AI Code Start</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;560;720;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="top"><div class="wrap nav"><a class="brand" href="index.html">AI Code <span>Start</span></a><a href="index.html">Все модули</a></div></header>
+<main class="module"><div class="wrap"><div class="module-head"><div><div class="eyebrow">Модуль 14</div><h1>Автоматизация через n8n</h1><p class="lead">Понять, какие процессы можно поставить на автопилот.</p></div><aside class="sidebox"><strong>Результат модуля</strong><p>После этого блока человек понимает, что делать руками, что поручать AI и какой следующий шаг сделать в проекте.</p></aside></div><section class="section"><h2>Простое объяснение</h2><h3>Что автоматизировать</h3><p>Заявки, письма, таблицы, публикации, напоминания, CRM, summaries, обработку форм.</p><h3>Простой сценарий</h3><p>Форма на сайте → n8n → GPT анализирует заявку → Google Sheets → email клиенту → уведомление в Telegram.</p></section><section class="section"><h2>Раскрывающиеся примеры и copy-paste</h2><details><summary>Workflow логика</summary><div class="detail"><pre><code>Trigger: New form submission
+Step 1: Clean data
+Step 2: Send to GPT for summary
+Step 3: Add row to Google Sheets
+Step 4: Send email confirmation
+Step 5: Notify Telegram channel</code></pre><div class="copy-note">Скопируйте блок целиком и вставьте в Cursor, ChatGPT, Claude или терминал, если это команды.</div></div></details><details><summary>Prompt для GPT в n8n</summary><div class="detail"><pre><code>Суммируй заявку клиента.
+Определи: имя, потребность, срочность, бюджет, следующий шаг.
+Ответ дай в JSON:
+{
+  &quot;name&quot;: &quot;&quot;,
+  &quot;need&quot;: &quot;&quot;,
+  &quot;urgency&quot;: &quot;&quot;,
+  &quot;budget&quot;: &quot;&quot;,
+  &quot;next_step&quot;: &quot;&quot;
+}</code></pre><div class="copy-note">Скопируйте блок целиком и вставьте в Cursor, ChatGPT, Claude или терминал, если это команды.</div></div></details></section><section class="section"><h2>Практика шаг за шагом</h2><div class="steps"><div class="step">Нарисовать один процесс.</div><div class="step">Создать форму.</div><div class="step">Подключить Google Sheets.</div><div class="step">Добавить GPT только после стабильного сбора данных.</div></div></section><nav class="pager"><a href="module-13.html">Назад</a><a href="module-15.html">Дальше</a></nav></div></main>
+<footer class="footer"><div class="wrap">Экспресс-курс для начинающего AI-assisted developer. Минималистичная версия для самостоятельного прохождения и живого занятия.</div></footer>
+</body>
+</html>
