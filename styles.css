@@ -149,10 +149,12 @@ body::before{
 .hero h1 .b{color:var(--blue)}
 .hero h1 .spk{color:var(--warn);animation:twinkle 2.2s infinite}
 .hero p{font-size:17px;color:var(--ink-soft);font-weight:600;max-width:430px;margin:0 0 26px}
-.hero-r{position:relative;background:
-   linear-gradient(180deg,#dfe7ff,#eef0ff);border-left:2px solid var(--line);
-   display:flex;align-items:flex-end;justify-content:center;min-height:330px}
+.hero-r{position:relative;background:#eef1fb;border-left:2px solid var(--line);
+   display:flex;align-items:center;justify-content:center;min-height:330px;overflow:hidden}
 .hero-r svg{width:100%;height:100%;display:block}
+.hero-r picture{display:block;width:100%;height:100%}
+.hero-img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;
+  image-rendering:auto}
 
 /* floating sparkles */
 .spark{position:absolute;color:var(--lav);font-size:14px;animation:floaty 4s ease-in-out infinite}

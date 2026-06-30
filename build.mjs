@@ -121,11 +121,10 @@ function buildIndex(){
         <a class="btn" href="module-01.html">Начать обучение <span class="hb">&#10084;</span></a>
       </div>
       <div class="hero-r">
-        <span class="spark s1" style="top:14%;left:12%">&#10022;</span>
-        <span class="spark s2" style="top:26%;left:84%">&#10022;</span>
-        <span class="spark s3" style="top:60%;left:8%">&#10022;</span>
-        <span class="spark s4" style="top:44%;left:90%">&#10022;</span>
-        ${HERO}
+        <picture>
+          <source srcset="assets/hero.webp" type="image/webp">
+          <img class="hero-img" src="assets/hero.jpg" alt="Девушка-разработчица за ноутбуком с котом, растениями и видом на город — пиксель-арт" loading="eager">
+        </picture>
       </div>
     </section>
 
