@@ -1,6 +1,6 @@
 import { writeFileSync } from 'node:fs';
 import { ICONS, SOCIAL, HERO, px } from './sprites.mjs';
-import { MODULES, BONUS, CHEATS, PROMPTS } from './content.mjs';
+import { MODULES, BONUS, CHEATS, PROMPTS, PRO_PROMPTS, PLAIN, GLOSSARY } from './content.mjs';
 
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 // raster pixel-art icons available in assets/icons/<name>.webp
@@ -36,6 +36,7 @@ const topnav = active => `
     <a href="index.html">О курсе</a>
     <a href="index.html#modules">Модули</a>
     <a href="prompts.html">Промпты</a>
+    <a href="glossary.html">Глоссарий</a>
     <a href="bonus.html">Бонусы</a>
     <a href="cheatsheet.html">Шпаргалка</a>
   </nav>
@@ -51,6 +52,7 @@ const sidebar = activeIdx => `
     </ul>
     <div class="side-bonus">
       <a href="prompts.html">&#128221; Промпты для бизнеса</a>
+      <a href="glossary.html" style="margin-top:8px">&#128214; Глоссарий</a>
       <a href="bonus.html" style="margin-top:8px">&#127873; Бонусы</a>
     </div>
     <div class="side-mascot">${mascot('wave','side')}<span>Ты справишься!</span></div>
@@ -62,7 +64,8 @@ function shortTitle(t){ return t.split(/[:—]/)[0].trim(); }
 const footer = `
 <footer class="footer"><div class="wrap">
   <span class="hb">&#10084;</span> Сделано с любовью для тебя
-  <span style="opacity:.6;margin-left:6px">© 2026 Code for Women · Claude Code Mastery</span>
+  <span style="opacity:.6;margin-left:6px">© 2026 Code for Women</span>
+  <a href="https://docs.claude.com/en/docs/claude-code" target="_blank" rel="noopener" class="docs-link">&#128218; Официальные доки Claude Code</a>
   <span class="socials">
     <a href="#" aria-label="heart">${px(SOCIAL.heart)}</a>
     <a href="#" aria-label="instagram">${px(SOCIAL.ig)}</a>
@@ -202,6 +205,8 @@ function buildModules(){
 
     <div class="goal panel" style="box-shadow:none"><b><span>&#127919;</span> Результат модуля</b><p>${esc(m.goal)}</p></div>
 
+    ${PLAIN[i]?`<div class="plain"><span class="plain-ic">${mascot('idea')}</span><div><b>Простыми словами</b><p>${PLAIN[i]}</p></div></div>`:''}
+
     ${sections}
 
     <nav class="pager">${prev}${next}</nav>
@@ -278,7 +283,7 @@ function buildCheatsheet(){
 // ---------- PROMPTS LIBRARY ----------
 function buildPrompts(){
   const anatomy = PROMPTS.anatomy.map(a=>`<div class="chip"><b>${esc(a.k)}</b> — ${esc(a.v)}</div>`).join('');
-  const groups = PROMPTS.groups.map(g=>`
+  const groups = [...PROMPTS.groups, ...PRO_PROMPTS].map(g=>`
     <section class="section panel">
       <h2>${icon(g.icon)} ${esc(g.group)}</h2>
       ${g.items.map(it=>`<details><summary>${esc(it.title)}</summary><div class="detail">
@@ -314,9 +319,36 @@ function buildPrompts(){
   writeFileSync('prompts.html', html);
 }
 
+// ---------- GLOSSARY ----------
+function buildGlossary(){
+  const groups = GLOSSARY.groups.map(g=>`
+    <section class="section panel">
+      <h2>${icon(g.icon)} ${esc(g.group)}</h2>
+      <dl class="gloss">${g.items.map(([t,d])=>`<dt>${t}</dt><dd>${d}</dd>`).join('')}</dl>
+    </section>`).join('');
+  const html = head('Глоссарий') + topnav('glossary.html') + `
+<main class="wrap"><div class="shell">
+  ${sidebar(-1)}
+  <div>
+    <div class="mod-head panel">
+      <div><span class="eyebrow">&#128214; Глоссарий</span><h1>${esc(GLOSSARY.title)}</h1><p class="lead">${esc(GLOSSARY.lead)}</p></div>
+      <div class="mod-art">${mascot('idea','big')}</div>
+    </div>
+    ${groups}
+    <div class="note tip"><span class="ni">&#128218;</span><div>Хочешь первоисточник? Всё это — из <a href="https://docs.claude.com/en/docs/claude-code" target="_blank" rel="noopener"><b>официальной документации Claude Code</b></a> от Anthropic.</div></div>
+    <nav class="pager">
+      <a class="prev" href="index.html"><span>&#8592; На главную</span>Все модули</a>
+      <a class="next" href="prompts.html"><span>Дальше &#8594;</span>Промпты для бизнеса</a>
+    </nav>
+  </div>
+</div></main>` + footer;
+  writeFileSync('glossary.html', html);
+}
+
 buildIndex();
 buildModules();
 buildBonus();
 buildPrompts();
+buildGlossary();
 buildCheatsheet();
-console.log(`Built index + ${MODULES.length} modules + prompts + bonus + cheatsheet`);
+console.log(`Built index + ${MODULES.length} modules + prompts + glossary + bonus + cheatsheet`);
