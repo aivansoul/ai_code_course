@@ -139,8 +139,10 @@ body::before{
 /* ============================================================
    HERO
    ============================================================ */
-.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:0;overflow:hidden;margin-bottom:22px}
-.hero-l{padding:40px 38px}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:0;overflow:hidden;margin-bottom:22px;
+  background:linear-gradient(120deg,#e9f0ff 0%,#eef0fb 52%,#f4f0ff 100%)}
+.hero.panel::after{display:none}
+.hero-l{padding:40px 38px;position:relative;z-index:2}
 .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--pixel);
   font-size:9px;color:var(--blue);background:var(--blue-soft);
   padding:7px 11px;border-radius:8px;border:2px solid var(--lav);margin-bottom:18px}
@@ -149,12 +151,15 @@ body::before{
 .hero h1 .b{color:var(--blue)}
 .hero h1 .spk{color:var(--warn);animation:twinkle 2.2s infinite}
 .hero p{font-size:17px;color:var(--ink-soft);font-weight:600;max-width:430px;margin:0 0 26px}
-.hero-r{position:relative;background:#eef1fb;border-left:2px solid var(--line);
-   display:flex;align-items:center;justify-content:center;min-height:330px;overflow:hidden}
+.hero-r{position:relative;background:transparent;
+   display:flex;align-items:center;justify-content:center;min-height:330px;overflow:hidden;
+   margin-left:-60px}
 .hero-r svg{width:100%;height:100%;display:block}
 .hero-r picture{display:block;width:100%;height:100%}
-.hero-img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;
-  image-rendering:auto}
+.hero-img{width:100%;height:100%;object-fit:cover;object-position:center right;display:block;
+  image-rendering:auto;
+  -webkit-mask-image:linear-gradient(to right, transparent 0%, #000 30%);
+          mask-image:linear-gradient(to right, transparent 0%, #000 30%)}
 
 /* floating sparkles */
 .spark{position:absolute;color:var(--lav);font-size:14px;animation:floaty 4s ease-in-out infinite}
