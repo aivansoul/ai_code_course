@@ -84,8 +84,8 @@ function renderBlock(b){
     case 'compare': return `<div class="compare">
         <div class="cbox bad"><span class="tag">&#10007; ${esc(b.bad.tag)}</span><p>${b.bad.text}</p></div>
         <div class="cbox good"><span class="tag">&#10003; ${esc(b.good.tag)}</span><p>${b.good.text}</p></div></div>`;
-    case 'table': return `<table class="tbl"><thead><tr>${b.head.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead>
-        <tbody>${b.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+    case 'table': return `<div class="tblwrap"><table class="tbl"><thead><tr>${b.head.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead>
+        <tbody>${b.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
     case 'code': return codeBlock(b);
     case 'features': return `<div class="fgrid">${b.items.map(f=>`
         <div class="fcard"><div class="fi">${icon(f.icon)}</div>
@@ -134,11 +134,42 @@ function buildIndex(){
       </div>
     </section>
 
-    <h2 class="block-title"><span class="hb">&#10084;</span> Все модули</h2>
-    <div id="modules" class="modgrid">${cards}</div>
+    <div class="dash">
+      <div class="dash-main">
+        <h2 class="block-title"><span class="hb">&#10084;</span> Все модули</h2>
+        <div id="modules" class="modgrid">${cards}</div>
+      </div>
+      <aside class="dash-side">
+        ${featuredPanel()}
+      </aside>
+    </div>
   </div>
 </div></main>` + footer;
   writeFileSync('index.html', html);
+}
+
+// featured module teaser (matches the reference right-hand panel)
+function featuredPanel(){
+  return `<div class="featured panel">
+    <div class="feat-head">
+      <span class="feat-eyebrow">&#9666; Модуль 08</span>
+      <a class="feat-next" href="module-08.html">Открыть &#9656;</a>
+    </div>
+    <h3 class="feat-title">Промпты для Claude Code</h3>
+    <div class="feat-row">
+      <p class="feat-desc">Промпт — это твоя инструкция для ИИ обычными словами. Чем точнее запрос, тем лучше результат.</p>
+      <div class="feat-bubble">PROMPT<span></span></div>
+    </div>
+    <div class="feat-label bad">Пример плохого промпта</div>
+    <details class="feat-drop"><summary>«Сделай красиво»</summary>
+      <div class="detail"><p style="margin:0">Слишком расплывчато — Claude угадывает, что ты имела в виду, и часто промахивается.</p></div>
+    </details>
+    <div class="feat-label good">Пример хорошего промпта</div>
+    <details class="feat-drop" open><summary>Чёткий запрос с деталями</summary>
+      <div class="detail">${codeBlock({code:'Создай landing page.\nЦель: запись на курс.\nСтиль: минимализм, белый фон, синий акцент.\nСтек: HTML + Tailwind, адаптив.\nПроверка: покажи план, потом собери.'})}</div>
+    </details>
+    <div class="note tip" style="margin-bottom:0"><span class="ni">&#128161;</span><div>Чем больше деталей в промпте, тем точнее Claude понимает задачу.</div></div>
+  </div>`;
 }
 
 // ---------- MODULE PAGES ----------
