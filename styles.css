@@ -208,6 +208,21 @@ body::before{
 .section h2 svg,.block-title svg,.cheat h3 svg{width:22px;height:22px;flex:0 0 auto}
 .fcard .fi svg{width:26px;height:26px}
 .footer .socials a svg{width:18px;height:18px}
+
+/* raster pixel-art icons */
+.pic{image-rendering:pixelated;display:block;object-fit:contain}
+.section h2 .pic,.block-title .pic,.cheat h3 .pic{width:26px;height:26px;flex:0 0 auto}
+.fcard .fi .pic{width:34px;height:34px}
+.micon .pic{width:54px;height:54px}
+.mod-art .pic{width:120px;height:120px}
+
+/* mascot character art */
+.mascot{image-rendering:pixelated;display:block}
+.mascot.big{width:150px;height:150px;object-fit:contain;animation:bob 3s ease-in-out infinite}
+.side-mascot{display:flex;align-items:center;gap:8px;margin-top:14px;padding:10px;
+  background:var(--panel-2);border:2px dashed var(--lav);border-radius:12px}
+.side-mascot .mascot.side{width:46px;height:60px;object-fit:contain}
+.side-mascot span{font-weight:800;font-size:12.5px;color:var(--blue-deep)}
 .section h3{margin:18px 0 6px;font-size:16px;font-weight:900;color:var(--ink)}
 .section p{color:var(--ink-soft);font-weight:600;margin:8px 0}
 .section ul,.section ol{color:var(--ink-soft);font-weight:600;padding-left:22px}

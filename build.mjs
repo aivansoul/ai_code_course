@@ -3,7 +3,12 @@ import { ICONS, SOCIAL, HERO, px } from './sprites.mjs';
 import { MODULES, BONUS, CHEATS, PROMPTS } from './content.mjs';
 
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-const icon = name => px(ICONS[name] || ICONS.star);
+// raster pixel-art icons available in assets/icons/<name>.webp
+const RASTER = new Set(['rocket','install','terminal','toggle','slash','memory','broom','chat','plan','star','robots','puzzle','plug','hook','clock','loop','bee','shield','cloud','target']);
+const icon = name => RASTER.has(name)
+  ? `<img class="pic" src="assets/icons/${name}.webp" alt="" loading="lazy">`
+  : px(ICONS[name] || ICONS.star);
+const mascot = (name,cls='') => `<img class="mascot ${cls}" src="assets/mascot/${name}.webp" alt="" loading="lazy">`;
 const id = i => String(i+1).padStart(2,'0');
 const modFile = i => `module-${id(i)}.html`;
 
@@ -48,6 +53,7 @@ const sidebar = activeIdx => `
       <a href="prompts.html">&#128221; Промпты для бизнеса</a>
       <a href="bonus.html" style="margin-top:8px">&#127873; Бонусы</a>
     </div>
+    <div class="side-mascot">${mascot('wave','side')}<span>Ты справишься!</span></div>
   </div>
 </aside>`;
 
@@ -82,7 +88,7 @@ function renderBlock(b){
         <tbody>${b.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
     case 'code': return codeBlock(b);
     case 'features': return `<div class="fgrid">${b.items.map(f=>`
-        <div class="fcard"><div class="fi">${px(ICONS[f.icon]||ICONS.star)}</div>
+        <div class="fcard"><div class="fi">${icon(f.icon)}</div>
           <h4>${esc(f.title)}</h4><p>${esc(f.text)}</p>${f.tag?`<span class="ft">${esc(f.tag)}</span>`:''}</div>`).join('')}</div>`;
     case 'details': return b.items.map(d=>`<details><summary>${esc(d.summary)}</summary><div class="detail">${d.code?codeBlock({code:d.code}):d.html||''}</div></details>`).join('');
     default: return '';
@@ -179,7 +185,7 @@ function buildBonus(){
   const flow = BONUS.finalFlow.map((s,i)=>`<div class="step"><b>${esc(s.n)}</b> — ${esc(s.t)}</div>`).join('');
   const plugins = BONUS.plugins.map(g=>`
     <section class="section panel"><h2><span class="hb">&#10073;</span> ${esc(g.group)}</h2>
-      <div class="fgrid">${g.items.map(it=>`<div class="fcard"><div class="fi">${px(ICONS[g.icon]||ICONS.puzzle)}</div><h4>${esc(it.title)}</h4><p>${esc(it.text)}</p><span class="ft">${esc(it.tag)}</span></div>`).join('')}</div>
+      <div class="fgrid">${g.items.map(it=>`<div class="fcard"><div class="fi">${icon(g.icon)}</div><h4>${esc(it.title)}</h4><p>${esc(it.text)}</p><span class="ft">${esc(it.tag)}</span></div>`).join('')}</div>
     </section>`).join('');
   const prompts = BONUS.prompts.map(p=>`<details><summary>${esc(p.title)}</summary><div class="detail">${codeBlock({code:p.code})}</div></details>`).join('');
 
@@ -189,7 +195,7 @@ function buildBonus(){
   <div>
     <div class="mod-head panel">
       <div><span class="eyebrow">&#127873; Бонусы</span><h1>${esc(BONUS.title)}</h1><p class="lead">${esc(BONUS.lead)}</p></div>
-      <div class="mod-art bob">${icon('flag')}</div>
+      <div class="mod-art">${mascot('heart','big')}</div>
     </div>
 
     <section class="section panel"><h2><span class="hb">&#10073;</span> Финальный workflow: от идеи до продакшена</h2>
@@ -216,7 +222,7 @@ function buildBonus(){
 
 // ---------- CHEATSHEET ----------
 function buildCheatsheet(){
-  const cards = CHEATS.map(c=>`<div class="cheat panel"><h3>${px(ICONS[c.icon]||ICONS.star)} ${esc(c.title)}</h3>
+  const cards = CHEATS.map(c=>`<div class="cheat panel"><h3>${icon(c.icon)} ${esc(c.title)}</h3>
     <div class="cbody"><dl>${c.rows.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></div></div>`).join('');
 
   const html = head('Шпаргалка') + topnav() + `
@@ -225,7 +231,7 @@ function buildCheatsheet(){
   <div>
     <div class="mod-head panel">
       <div><span class="eyebrow">&#9889; Cheatsheet</span><h1>Шпаргалка Claude Code</h1><p class="lead">Всё самое нужное на одном экране. Распечатай или держи открытым рядом.</p></div>
-      <div class="mod-art bob">${icon('terminal')}</div>
+      <div class="mod-art">${mascot('laptop','big')}</div>
     </div>
     <div class="cheatgrid">${cards}</div>
     <div class="note tip" style="margin-top:18px"><span class="ni">&#128161;</span><div>Полные объяснения каждой строки — в соответствующих модулях курса. Эта страница — быстрый справочник.</div></div>
@@ -243,7 +249,7 @@ function buildPrompts(){
   const anatomy = PROMPTS.anatomy.map(a=>`<div class="chip"><b>${esc(a.k)}</b> — ${esc(a.v)}</div>`).join('');
   const groups = PROMPTS.groups.map(g=>`
     <section class="section panel">
-      <h2>${px(ICONS[g.icon]||ICONS.star)} ${esc(g.group)}</h2>
+      <h2>${icon(g.icon)} ${esc(g.group)}</h2>
       ${g.items.map(it=>`<details><summary>${esc(it.title)}</summary><div class="detail">
         <p style="margin-top:0"><b>Когда:</b> ${esc(it.when)}</p>
         ${codeBlock({code:it.code})}
@@ -256,7 +262,7 @@ function buildPrompts(){
   <div>
     <div class="mod-head panel">
       <div><span class="eyebrow">&#128221; Prompt Library</span><h1>${esc(PROMPTS.title)}</h1><p class="lead">${esc(PROMPTS.lead)}</p></div>
-      <div class="mod-art bob">${icon('chat')}</div>
+      <div class="mod-art">${mascot('idea','big')}</div>
     </div>
 
     <section class="section panel">

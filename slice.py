@@ -32,6 +32,7 @@ def trim_pad(im, pad_ratio=0.1, size=256):
 
 def main():
     sheet, cols, rows, outdir, prefix = sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), sys.argv[4], sys.argv[5]
+    names = sys.argv[6].split(",") if len(sys.argv) > 6 and sys.argv[6] else None
     import os; os.makedirs(outdir, exist_ok=True)
     im = Image.open(sheet).convert("RGBA")
     W,H = im.size
@@ -42,8 +43,9 @@ def main():
             cell = im.crop((round(c*cw), round(r*ch), round((c+1)*cw), round((r+1)*ch)))
             cell = make_transparent(cell)
             cell = trim_pad(cell)
+            fname = names[n] if names and n < len(names) else f"{prefix}{n+1:02d}"
+            cell.save(f"{outdir}/{fname}.webp", "WEBP", quality=92, method=6)
             n += 1
-            cell.save(f"{outdir}/{prefix}{n:02d}.png")
-    print(f"sliced {n} tiles -> {outdir}/{prefix}NN.png")
+    print(f"sliced {n} tiles -> {outdir}/")
 
 main()
