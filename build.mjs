@@ -9,6 +9,9 @@ const icon = name => RASTER.has(name)
   ? `<img class="pic" src="assets/icons/${name}.webp" alt="" loading="lazy">`
   : px(ICONS[name] || ICONS.star);
 const mascot = (name,cls='') => `<img class="mascot ${cls}" src="assets/mascot/${name}.webp" alt="" loading="lazy">`;
+// animated sprite strip (frame-by-frame). ar = frame width/height ratio.
+const sprite = (name,ar,n,h='64px',dur='.9s') =>
+  `<span class="spr" role="img" aria-label="${name}" style="--ar:${ar};--n:${n};--h:${h};--dur:${dur};background-image:url(assets/anim/${name}.webp);animation-timing-function:steps(${n})"></span>`;
 const id = i => String(i+1).padStart(2,'0');
 const modFile = i => `module-${id(i)}.html`;
 
@@ -55,7 +58,7 @@ const sidebar = activeIdx => `
       <a href="glossary.html" style="margin-top:8px">&#128214; Глоссарий</a>
       <a href="bonus.html" style="margin-top:8px">&#127873; Бонусы</a>
     </div>
-    <div class="side-mascot">${mascot('wave','side')}<span>Ты справишься!</span></div>
+    <div class="side-mascot">${sprite('wave',0.469,4,'74px')}<span>Ты справишься!</span></div>
   </div>
 </aside>`;
 

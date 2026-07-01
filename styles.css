@@ -350,6 +350,20 @@ details[open] summary{border-bottom:2px solid var(--line);background:#fff}
   border:2px solid var(--line);border-radius:9px;color:var(--blue);box-shadow:var(--shadow-sm)}
 .footer .socials a:hover{border-color:var(--blue);transform:translateY(-2px)}
 
+/* ============================================================
+   SPRITE-SHEET ANIMATION (frame-by-frame, like a 2D game)
+   element shows ONE frame; steps(n) flips background through the strip
+   ============================================================ */
+.spr{display:inline-block;background-repeat:no-repeat;background-position:0 0;
+  image-rendering:pixelated;
+  height:var(--h,64px);
+  width:calc(var(--h,64px) * var(--ar,1));
+  background-size:calc(var(--h,64px) * var(--ar,1) * var(--n,4)) 100%;
+  animation-name:sprite-play;animation-duration:var(--dur,.9s);
+  animation-iteration-count:infinite;animation-fill-mode:both}
+@keyframes sprite-play{to{background-position-x:calc(var(--h,64px) * var(--ar,1) * var(--n,4) * -1)}}
+@media (prefers-reduced-motion:reduce){ .spr{animation:none!important;background-position:0 0!important} }
+
 /* plain-language beginner callout */
 .plain{display:flex;gap:14px;align-items:center;margin:14px 0;padding:14px 18px;
   background:linear-gradient(120deg,#fff6e9,#fff);border:2px solid #f3d7a3;border-radius:16px;
