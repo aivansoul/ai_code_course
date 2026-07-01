@@ -208,7 +208,7 @@ function buildModules(){
 
     <div class="goal panel" style="box-shadow:none"><b><span>&#127919;</span> Результат модуля</b><p>${esc(m.goal)}</p></div>
 
-    ${PLAIN[i]?`<div class="plain"><span class="plain-ic">${mascot('idea')}</span><div><b>Простыми словами</b><p>${PLAIN[i]}</p></div></div>`:''}
+    ${PLAIN[i]?`<div class="plain"><span class="plain-ic">${sprite('idea',0.576,4,'72px','1.2s')}</span><div><b>Простыми словами</b><p>${PLAIN[i]}</p></div></div>`:''}
 
     ${sections}
 
@@ -234,7 +234,7 @@ function buildBonus(){
   <div>
     <div class="mod-head panel">
       <div><span class="eyebrow">&#127873; Бонусы</span><h1>${esc(BONUS.title)}</h1><p class="lead">${esc(BONUS.lead)}</p></div>
-      <div class="mod-art">${mascot('heart','big')}</div>
+      <div class="mod-art">${sprite('heart',0.553,4,'150px','1.0s')}</div>
     </div>
 
     <section class="section panel"><h2><span class="hb">&#10073;</span> Финальный workflow: от идеи до продакшена</h2>
@@ -270,7 +270,7 @@ function buildCheatsheet(){
   <div>
     <div class="mod-head panel">
       <div><span class="eyebrow">&#9889; Cheatsheet</span><h1>Шпаргалка Claude Code</h1><p class="lead">Всё самое нужное на одном экране. Распечатай или держи открытым рядом.</p></div>
-      <div class="mod-art">${mascot('laptop','big')}</div>
+      <div class="mod-art">${sprite('laptop',0.358,4,'150px','1.0s')}</div>
     </div>
     <div class="cheatgrid">${cards}</div>
     <div class="note tip" style="margin-top:18px"><span class="ni">&#128161;</span><div>Полные объяснения каждой строки — в соответствующих модулях курса. Эта страница — быстрый справочник.</div></div>
@@ -301,7 +301,7 @@ function buildPrompts(){
   <div>
     <div class="mod-head panel">
       <div><span class="eyebrow">&#128221; Prompt Library</span><h1>${esc(PROMPTS.title)}</h1><p class="lead">${esc(PROMPTS.lead)}</p></div>
-      <div class="mod-art">${mascot('idea','big')}</div>
+      <div class="mod-art">${sprite('idea',0.576,4,'150px','1.2s')}</div>
     </div>
 
     <section class="section panel">
@@ -335,7 +335,7 @@ function buildGlossary(){
   <div>
     <div class="mod-head panel">
       <div><span class="eyebrow">&#128214; Глоссарий</span><h1>${esc(GLOSSARY.title)}</h1><p class="lead">${esc(GLOSSARY.lead)}</p></div>
-      <div class="mod-art">${mascot('idea','big')}</div>
+      <div class="mod-art">${sprite('idea',0.576,4,'150px','1.2s')}</div>
     </div>
     ${groups}
     <div class="note tip"><span class="ni">&#128218;</span><div>Хочешь первоисточник? Всё это — из <a href="https://docs.claude.com/en/docs/claude-code" target="_blank" rel="noopener"><b>официальной документации Claude Code</b></a> от Anthropic.</div></div>
