@@ -179,12 +179,16 @@ body::before{
 .mcard:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 rgba(77,99,216,.18)}
 .mcard .mtop{display:flex;align-items:flex-start;justify-content:space-between}
 .mcard .mnum{font-family:var(--pixel);font-size:13px;color:var(--blue)}
-.mcard .mlock{font-size:14px;color:var(--lav)}
+.mcard .mcheck{font-size:13px;font-weight:900;color:#fff;background:var(--good);width:20px;height:20px;
+  border-radius:6px;display:none;place-items:center;box-shadow:2px 2px 0 #2f9d74}
+.mcard.done .mcheck{display:grid}
+.mcard.done{border-color:#a9e6cf}
 .mcard h4{margin:0;font-size:14.5px;font-weight:800;color:var(--ink);line-height:1.25}
 .mcard .micon{margin-top:auto;align-self:flex-start}
 .mcard .micon svg{width:46px;height:46px;display:block}
 .mbar{height:8px;border-radius:6px;background:var(--line-2);border:1px solid var(--line);overflow:hidden}
-.mbar i{display:block;height:100%;background:repeating-linear-gradient(90deg,var(--blue),var(--blue) 5px,var(--blue-deep) 5px,var(--blue-deep) 10px);width:0;animation:fill 1.2s ease forwards}
+.mbar i{display:block;height:100%;background:repeating-linear-gradient(90deg,var(--good),var(--good) 5px,#2f9d74 5px,#2f9d74 10px);width:0;transition:width .55s ease}
+.mcard.done .mbar i{width:100%}
 
 /* ============================================================
    MODULE PAGE
@@ -399,6 +403,32 @@ details[open] summary{border-bottom:2px solid var(--line);background:#fff}
 .track-stage .ts-mods{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--blue);background:var(--blue-soft);padding:2px 7px;border-radius:6px;margin-left:4px}
 .track-stage p{margin:0;font-size:13.5px;color:var(--ink-soft);font-weight:600}
 
+/* progress tracker: done button, banner, sidebar check, self-check */
+.done-btn{margin-top:12px;display:inline-flex;align-items:center;gap:9px;cursor:pointer;
+  font-weight:900;font-size:14px;color:#1f7a59;background:#fff;border:2px solid #a9e6cf;
+  border-radius:12px;padding:10px 16px;box-shadow:var(--shadow-sm);transition:transform .1s}
+.done-btn:hover{transform:translateY(-2px)}
+.done-btn .db-box{width:22px;height:22px;border-radius:6px;border:2px solid #a9e6cf;display:grid;place-items:center;color:transparent;font-size:13px;font-weight:900}
+.done-btn.is-done{background:var(--good);color:#fff;border-color:var(--good)}
+.done-btn.is-done .db-box{background:#fff;color:var(--good);border-color:#fff}
+.side-check{margin-left:auto;color:var(--good);font-weight:900;font-size:12px;display:none}
+.side-list a.done .side-check{display:inline}
+.side-list a.done{color:#2f9d74}
+.prog-banner{padding:14px 16px;margin-bottom:14px}
+.pb-head{display:flex;justify-content:space-between;align-items:center;font-weight:800;color:var(--ink);font-size:14px;margin-bottom:8px}
+.pb-pct{font-family:var(--pixel);font-size:11px;color:var(--good)}
+.pb-bar{height:12px;background:var(--line-2);border:2px solid var(--line);border-radius:8px;overflow:hidden}
+.pb-fill{display:block;height:100%;width:0;transition:width .5s ease;
+  background:repeating-linear-gradient(90deg,var(--good),var(--good) 6px,#2f9d74 6px,#2f9d74 12px)}
+.pb-reset{margin-top:8px;background:none;border:none;color:var(--muted);font-weight:700;font-size:12px;cursor:pointer;text-decoration:underline}
+.section.selfcheck{border-color:var(--lav)}
+.section.selfcheck h2{color:var(--blue-deep)}
+.section.selfcheck h2 svg{width:22px;height:22px;flex:0 0 auto}
+.checklist{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:8px}
+.checklist li label{display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-weight:600;color:var(--ink-soft);font-size:14.5px}
+.checklist input{width:20px;height:20px;margin:1px 0 0;accent-color:var(--good);cursor:pointer;flex:0 0 auto}
+.checklist input:checked ~ span{color:var(--good);text-decoration:line-through;text-decoration-color:#a9e6cf}
+
 /* plain-language beginner callout */
 .plain{display:flex;gap:14px;align-items:center;margin:14px 0;padding:14px 18px;
   background:linear-gradient(120deg,#fff6e9,#fff);border:2px solid #f3d7a3;border-radius:16px;
@@ -486,7 +516,6 @@ details[open] summary{border-bottom:2px solid var(--line);background:#fff}
 
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;scroll-behavior:auto}
-  .mbar i{width:var(--p,40%)}
   .mbar i::after{display:none}
 }
 

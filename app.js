@@ -1,4 +1,4 @@
-// Copy buttons + progress bar fill on view
+// Copy buttons
 document.addEventListener('click', e => {
   const btn = e.target.closest('.code .copy');
   if (!btn) return;
@@ -12,42 +12,55 @@ document.addEventListener('click', e => {
   }).catch(() => { btn.textContent = 'CTRL+C'; });
 });
 
-// scroll-driven sprite animation: advance frames as the page scrolls (gentle)
+// ---- Progress tracking (localStorage): module completion + self-checks ----
 (function () {
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const sprites = [...document.querySelectorAll('.spr.scroll')];
-  if (!sprites.length || reduce) return;
-  let ticking = false;
-  function update() {
-    const y = window.scrollY || document.documentElement.scrollTop || 0;
-    for (const el of sprites) {
-      const n = parseInt(getComputedStyle(el).getPropertyValue('--n')) || 4;
-      const step = parseFloat(el.dataset.step) || 72;   // px of scroll per frame
-      const fw = el.getBoundingClientRect().width || 1;
-      // ping-pong through frames so motion eases back (0..n-1..1)
-      const cycle = (n - 1) * 2 || 1;
-      let p = Math.floor(y / step) % cycle;
-      const f = p < n ? p : cycle - p;
-      el.style.backgroundPositionX = (-(f * fw)) + 'px';
-    }
-    ticking = false;
-  }
-  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
-  addEventListener('resize', update, { passive: true });
-  update();
-})();
+  const KEY = 'cfw-progress', CKEY = 'cfw-checks';
+  const load = () => { try { return new Set(JSON.parse(localStorage.getItem(KEY) || '[]')); } catch (e) { return new Set(); } };
+  const save = s => localStorage.setItem(KEY, JSON.stringify([...s]));
+  let done = load();
 
-// animate module-grid bars when scrolled into view
-const bars = document.querySelectorAll('.mbar i');
-if (bars.length && 'IntersectionObserver' in window) {
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(en => {
-      if (en.isIntersecting) {
-        const i = en.target;
-        i.style.width = getComputedStyle(i).getPropertyValue('--p') || '40%';
-        io.unobserve(i);
-      }
+  function apply() {
+    document.querySelectorAll('.mcard[data-mod]').forEach(c => c.classList.toggle('done', done.has(+c.dataset.mod)));
+    document.querySelectorAll('.side-list a[data-mod]').forEach(a => a.classList.toggle('done', done.has(+a.dataset.mod)));
+    document.querySelectorAll('.done-btn[data-mod]').forEach(b => {
+      const on = done.has(+b.dataset.mod);
+      b.classList.toggle('is-done', on);
+      const t = b.querySelector('.db-txt'); if (t) t.textContent = on ? 'Сделано!' : 'Отметить сделанным';
     });
-  }, { threshold: 0.4 });
-  bars.forEach(b => io.observe(b));
-}
+    const banner = document.querySelector('.prog-banner');
+    if (banner) {
+      const total = +banner.dataset.total || 20, n = done.size, pct = Math.round(n / total * 100);
+      banner.querySelector('.pb-count').textContent = n;
+      banner.querySelector('.pb-pct').textContent = pct + '%';
+      banner.querySelector('.pb-fill').style.width = pct + '%';
+      banner.classList.toggle('complete', n >= total);
+      const r = banner.querySelector('.pb-reset'); if (r) r.hidden = n === 0;
+    }
+  }
+
+  document.addEventListener('click', e => {
+    const b = e.target.closest('.done-btn');
+    if (b) {
+      const m = +b.dataset.mod;
+      done.has(m) ? done.delete(m) : done.add(m);
+      save(done); apply();
+      return;
+    }
+    const r = e.target.closest('.pb-reset');
+    if (r && confirm('Сбросить весь прогресс курса?')) {
+      done = new Set(); save(done); apply();
+      localStorage.removeItem(CKEY);
+      document.querySelectorAll('.checklist .ck').forEach(c => c.checked = false);
+    }
+  });
+  apply();
+
+  // self-check checkboxes persist per page
+  let cs = {}; try { cs = JSON.parse(localStorage.getItem(CKEY) || '{}'); } catch (e) {}
+  const pid = (location.pathname.split('/').pop() || 'index');
+  document.querySelectorAll('.checklist .ck').forEach((cb, i) => {
+    const k = pid + ':' + i;
+    if (cs[k]) cb.checked = true;
+    cb.addEventListener('change', () => { cs[k] = cb.checked; localStorage.setItem(CKEY, JSON.stringify(cs)); });
+  });
+})();

@@ -1,6 +1,6 @@
 import { writeFileSync } from 'node:fs';
 import { ICONS, SOCIAL, HERO, px } from './sprites.mjs';
-import { MODULES, BONUS, CHEATS, PROMPTS, PRO_PROMPTS, PLAIN, GLOSSARY, PRACTICE, START, CAPSTONE } from './content.mjs';
+import { MODULES, BONUS, CHEATS, PROMPTS, PRO_PROMPTS, PLAIN, GLOSSARY, PRACTICE, START, CAPSTONE, CHECK } from './content.mjs';
 
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 // raster pixel-art icons available in assets/icons/<name>.webp
@@ -56,7 +56,7 @@ const sidebar = activeIdx => `
   <div class="panel" style="padding:18px 14px">
     <div class="side-title"><span class="hb">&#10084;</span> Модули курса</div>
     <ul class="side-list">
-      ${MODULES.map((m,i)=>`<li><a href="${modFile(i)}" class="${i===activeIdx?'active':''} ${lockedOf(i)?'lock':''}"><span class="n">${id(i)}</span> ${esc(shortTitle(m.title))}</a></li>`).join('')}
+      ${MODULES.map((m,i)=>`<li><a href="${modFile(i)}" data-mod="${i}" class="${i===activeIdx?'active':''}"><span class="n">${id(i)}</span> ${esc(shortTitle(m.title))}<span class="side-check">&#10003;</span></a></li>`).join('')}
     </ul>
     <div class="side-bonus">
       <a href="prompts.html">${icon('chat')} Промпты для бизнеса</a>
@@ -117,12 +117,11 @@ function codeBlock({title,note,code}){
 // ---------- INDEX ----------
 function buildIndex(){
   const cards = MODULES.map((m,i)=>{
-    const p = progressOf(i), lock = lockedOf(i);
-    return `<a class="mcard panel" href="${modFile(i)}">
-      <div class="mtop"><span class="mnum">${id(i)}</span>${lock?'<span class="mlock">&#128274;</span>':''}</div>
+    return `<a class="mcard panel" href="${modFile(i)}" data-mod="${i}">
+      <div class="mtop"><span class="mnum">${id(i)}</span><span class="mcheck">&#10003;</span></div>
       <h4>${esc(shortTitle(m.title))}</h4>
       <div class="micon">${icon(m.icon)}</div>
-      <div class="mbar"><i style="--p:${p}%"></i></div>
+      <div class="mbar"><i></i></div>
     </a>`;
   }).join('');
 
@@ -154,6 +153,11 @@ function buildIndex(){
     <div class="dash">
       <div class="dash-main">
         <h2 class="block-title"><span class="hb">&#10084;</span> Все модули</h2>
+        <div class="prog-banner panel" data-total="${MODULES.length}">
+          <div class="pb-head"><span class="pb-txt">Твой прогресс: <b class="pb-count">0</b> из ${MODULES.length}</span><span class="pb-pct">0%</span></div>
+          <div class="pb-bar"><i class="pb-fill"></i></div>
+          <button class="pb-reset" type="button" hidden>сбросить</button>
+        </div>
         <div id="modules" class="modgrid">${cards}</div>
       </div>
       <aside class="dash-side">
@@ -228,6 +232,13 @@ function buildModules(){
       <p>${PRACTICE[i].do}</p>
       <div class="deliverable"><span class="dv-ic">${px(ICONS.flag)}</span><div><b>Твой результат</b><p>${PRACTICE[i].out}</p></div></div>
       <div class="grow">${px(ICONS.rocket)} <span>Это часть твоего проекта — он растёт с каждым модулем.</span></div>
+      <button class="done-btn" type="button" data-mod="${i}"><span class="db-box">✓</span><span class="db-txt">Отметить сделанным</span></button>
+    </section>`:''}
+
+    ${CHECK[i]?`<section class="section panel selfcheck">
+      <h2>${px(ICONS.shield)} Проверь себя</h2>
+      <p>Готова двигаться дальше, когда можешь:</p>
+      <ul class="checklist">${CHECK[i].map(c=>`<li><label><input type="checkbox" class="ck"> <span>${c}</span></label></li>`).join('')}</ul>
     </section>`:''}
 
     <nav class="pager">${prev}${next}</nav>
