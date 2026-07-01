@@ -48,7 +48,7 @@ def clean_frame(cell):
         if c is figure: continue
         area,minx,miny,maxx,maxy=c
         w=maxx-minx+1; h=maxy-miny+1
-        if min(w,h)<=4 or area<=12 or w>=4*h:   # thin/short line or tiny speck → remove
+        if min(w,h)<=4 or area<=12 or w>=4*h or h>=4*w:  # thin line (H or V) / speck → remove
             drop.append(c)
     if drop:
         d=ImageDraw.Draw(cell)
@@ -66,10 +66,11 @@ def main():
     import os; os.makedirs("assets/anim", exist_ok=True)
     im=Image.open(sheet).convert("RGBA"); W,H=im.size
     cw=W/ncols; ch=H/nrows
+    ix=round(cw*0.045); iy=round(ch*0.015)   # inset to drop faint frame-separator lines at cell edges
     frames=[]
     for r in range(nrows):
         for c in range(ncols):
-            cell=make_transparent(im.crop((round(c*cw),round(r*ch),round((c+1)*cw),round((r+1)*ch))))
+            cell=make_transparent(im.crop((round(c*cw)+ix,round(r*ch)+iy,round((c+1)*cw)-ix,round((r+1)*ch)-iy)))
             cell=clean_frame(cell)
             bb=cell.getbbox()
             if bb: cell=cell.crop(bb)

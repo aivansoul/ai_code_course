@@ -1,6 +1,6 @@
 import { writeFileSync } from 'node:fs';
 import { ICONS, SOCIAL, HERO, px } from './sprites.mjs';
-import { MODULES, BONUS, CHEATS, PROMPTS, PRO_PROMPTS, PLAIN, GLOSSARY } from './content.mjs';
+import { MODULES, BONUS, CHEATS, PROMPTS, PRO_PROMPTS, PLAIN, GLOSSARY, PRACTICE, START, CAPSTONE } from './content.mjs';
 
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 // raster pixel-art icons available in assets/icons/<name>.webp
@@ -63,7 +63,7 @@ const sidebar = activeIdx => `
       <a href="glossary.html" style="margin-top:8px">${icon('memory')} Глоссарий</a>
       <a href="bonus.html" style="margin-top:8px">${icon('star')} Бонусы</a>
     </div>
-    <div class="side-mascot">${sprite('wave',0.468,4,'74px',{scroll:true,step:80})}<span>Ты справишься!</span></div>
+    <div class="side-mascot">${sprite('wave',0.468,4,'74px',{dur:'2.2s'})}<span>Ты справишься!</span></div>
   </div>
 </aside>`;
 
@@ -91,7 +91,7 @@ function renderBlock(b){
     case 'list': return `<${b.ordered?'ol':'ul'}>${b.items.map(x=>`<li>${x}</li>`).join('')}</${b.ordered?'ol':'ul'}>`;
     case 'steps': return `<div class="steps">${b.items.map(x=>`<div class="step">${x}</div>`).join('')}</div>`;
     case 'chips': return `<div class="chips">${b.items.map(x=>`<span class="chip">${x}</span>`).join('')}</div>`;
-    case 'note': return `<div class="note ${b.kind}"><span class="ni">${({tip:'&#128161;',warn:'&#9888;&#65039;',key:'&#128273;'})[b.kind]||'&#128161;'}</span><div>${b.text}</div></div>`;
+    case 'note': return `<div class="note ${b.kind}"><span class="ni">${px(ICONS[({tip:'tip',warn:'warn',key:'key'})[b.kind]||'tip'])}</span><div>${b.text}</div></div>`;
     case 'compare': return `<div class="compare">
         <div class="cbox bad"><span class="tag">&#10007; ${esc(b.bad.tag)}</span><p>${b.bad.text}</p></div>
         <div class="cbox good"><span class="tag">&#10003; ${esc(b.good.tag)}</span><p>${b.good.text}</p></div></div>`;
@@ -145,6 +145,12 @@ function buildIndex(){
       </div>
     </section>
 
+    <section class="section panel start">
+      <h2>${icon('rocket')} ${esc(START.title)}</h2>
+      <p class="start-lead">${esc(START.lead)}</p>
+      <div class="steps">${START.steps.map(s=>`<div class="step">${esc(s)}</div>`).join('')}</div>
+    </section>
+
     <div class="dash">
       <div class="dash-main">
         <h2 class="block-title"><span class="hb">&#10084;</span> Все модули</h2>
@@ -179,7 +185,7 @@ function featuredPanel(){
     <details class="feat-drop" open><summary>Чёткий запрос с деталями</summary>
       <div class="detail">${codeBlock({code:'Создай landing page.\nЦель: запись на курс.\nСтиль: минимализм, белый фон, синий акцент.\nСтек: HTML + Tailwind, адаптив.\nПроверка: покажи план, потом собери.'})}</div>
     </details>
-    <div class="note tip" style="margin-bottom:0"><span class="ni">&#128161;</span><div>Чем больше деталей в промпте, тем точнее Claude понимает задачу.</div></div>
+    <div class="note tip" style="margin-bottom:0"><span class="ni">${px(ICONS.tip)}</span><div>Чем больше деталей в промпте, тем точнее Claude понимает задачу.</div></div>
   </div>`;
 }
 
@@ -213,9 +219,16 @@ function buildModules(){
 
     <div class="goal panel" style="box-shadow:none"><b><span>${icon('target')}</span> Результат модуля</b><p>${esc(m.goal)}</p></div>
 
-    ${PLAIN[i]?`<div class="plain"><span class="plain-ic">${sprite('idea',0.611,4,'74px',{scroll:true,step:70})}</span><div><b>Простыми словами</b><p>${PLAIN[i]}</p></div></div>`:''}
+    ${PLAIN[i]?`<div class="plain"><span class="plain-ic">${sprite('idea',0.532,4,'74px',{dur:'2.4s'})}</span><div><b>Простыми словами</b><p>${PLAIN[i]}</p></div></div>`:''}
 
     ${sections}
+
+    ${PRACTICE[i]?`<section class="section panel practice">
+      <h2>${icon('hook')} Сделай сам</h2>
+      <p>${PRACTICE[i].do}</p>
+      <div class="deliverable"><span class="dv-ic">${px(ICONS.flag)}</span><div><b>Твой результат</b><p>${PRACTICE[i].out}</p></div></div>
+      <div class="grow">${px(ICONS.rocket)} <span>Это часть твоего проекта — он растёт с каждым модулем.</span></div>
+    </section>`:''}
 
     <nav class="pager">${prev}${next}</nav>
   </div>
@@ -239,12 +252,18 @@ function buildBonus(){
   <div>
     <div class="mod-head panel">
       <div><span class="eyebrow">${icon('star')} Бонусы</span><h1>${esc(BONUS.title)}</h1><p class="lead">${esc(BONUS.lead)}</p></div>
-      <div class="mod-art">${sprite('heart',0.551,4,'150px',{dur:'1.9s'})}</div>
+      <div class="mod-art">${sprite('heart',0.551,4,'150px',{dur:'2s'})}</div>
     </div>
+
+    <section class="section panel"><h2>${icon('target')} ${esc(CAPSTONE.title)}</h2>
+      <p>${esc(CAPSTONE.lead)}</p>
+      <div class="track">${CAPSTONE.stages.map(st=>`<div class="track-stage"><div class="ts-ic">${icon(st.icon)}</div><div><h4>${esc(st.title)} <span class="ts-mods">Модули ${esc(st.mods)}</span></h4><p>${esc(st.text)}</p></div></div>`).join('')}</div>
+      <div class="note key"><span class="ni">${px(ICONS.key)}</span><div>${esc(CAPSTONE.manifesto)}</div></div>
+    </section>
 
     <section class="section panel"><h2><span class="hb">&#10073;</span> Финальный workflow: от идеи до продакшена</h2>
       <div class="steps">${flow}</div>
-      <div class="note key"><span class="ni">&#128273;</span><div>Это весь курс на одной странице. Каждый шаг опирается на свой модуль — возвращайся, когда нужно.</div></div>
+      <div class="note tip"><span class="ni">${px(ICONS.tip)}</span><div>Это весь курс на одной странице. Каждый шаг опирается на свой модуль — возвращайся, когда нужно.</div></div>
     </section>
 
     <h2 class="block-title"><span class="hb">&#10084;</span> Лучшие плагины под задачи</h2>
@@ -275,10 +294,10 @@ function buildCheatsheet(){
   <div>
     <div class="mod-head panel">
       <div><span class="eyebrow">${icon('terminal')} Cheatsheet</span><h1>Шпаргалка Claude Code</h1><p class="lead">Всё самое нужное на одном экране. Распечатай или держи открытым рядом.</p></div>
-      <div class="mod-art">${sprite('laptop',0.711,8,'150px',{scroll:true,step:55})}</div>
+      <div class="mod-art">${sprite('laptop',0.711,8,'150px',{dur:'1.8s'})}</div>
     </div>
     <div class="cheatgrid">${cards}</div>
-    <div class="note tip" style="margin-top:18px"><span class="ni">&#128161;</span><div>Полные объяснения каждой строки — в соответствующих модулях курса. Эта страница — быстрый справочник.</div></div>
+    <div class="note tip" style="margin-top:18px"><span class="ni">${px(ICONS.tip)}</span><div>Полные объяснения каждой строки — в соответствующих модулях курса. Эта страница — быстрый справочник.</div></div>
     <nav class="pager">
       <a class="prev" href="bonus.html"><span>&#8592; Назад</span>Бонусы и промпты</a>
       <a class="next" href="index.html"><span>На главную &#8594;</span>Все модули</a>
@@ -306,14 +325,14 @@ function buildPrompts(){
   <div>
     <div class="mod-head panel">
       <div><span class="eyebrow">${icon('chat')} Prompt Library</span><h1>${esc(PROMPTS.title)}</h1><p class="lead">${esc(PROMPTS.lead)}</p></div>
-      <div class="mod-art">${sprite('idea',0.611,4,'150px',{scroll:true,step:70})}</div>
+      <div class="mod-art">${sprite('idea',0.532,4,'150px',{dur:'2.4s'})}</div>
     </div>
 
     <section class="section panel">
       <h2><span class="hb">&#10073;</span> Анатомия модульного промпта</h2>
       <p>Любой промпт ниже — конструктор из 5 блоков. Меняй значения в <b>[КВАДРАТНЫХ СКОБКАХ]</b> под свой бизнес, переставляй и комбинируй блоки.</p>
       <div class="chips">${anatomy}</div>
-      <div class="note tip"><span class="ni">&#128161;</span><div>Подключай свои данные через <code class="inline">@файл.md</code> и MCP (модуль 13) — тогда Claude отвечает не «в общем», а про <b>твой</b> продукт.</div></div>
+      <div class="note tip"><span class="ni">${px(ICONS.tip)}</span><div>Подключай свои данные через <code class="inline">@файл.md</code> и MCP (модуль 13) — тогда Claude отвечает не «в общем», а про <b>твой</b> продукт.</div></div>
     </section>
 
     ${groups}
@@ -340,7 +359,7 @@ function buildGlossary(){
   <div>
     <div class="mod-head panel">
       <div><span class="eyebrow">${icon('memory')} Глоссарий</span><h1>${esc(GLOSSARY.title)}</h1><p class="lead">${esc(GLOSSARY.lead)}</p></div>
-      <div class="mod-art">${sprite('idea',0.611,4,'150px',{scroll:true,step:70})}</div>
+      <div class="mod-art">${sprite('idea',0.532,4,'150px',{dur:'2.4s'})}</div>
     </div>
     ${groups}
     <div class="note tip"><span class="ni">${icon('memory')}</span><div>Хочешь первоисточник? Всё это — из <a href="https://docs.claude.com/en/docs/claude-code" target="_blank" rel="noopener"><b>официальной документации Claude Code</b></a> от Anthropic.</div></div>

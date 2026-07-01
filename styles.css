@@ -289,7 +289,8 @@ details[open] summary{border-bottom:2px solid var(--line);background:#fff}
 /* callouts */
 .note{border-radius:14px;padding:14px 16px;margin:14px 0;font-weight:700;font-size:14px;
   border:2px solid;display:flex;gap:11px;align-items:flex-start}
-.note .ni{font-size:18px;line-height:1.3}
+.note .ni{font-size:18px;line-height:1;flex:0 0 auto;display:inline-flex}
+.note .ni svg,.note .ni .pic{width:22px;height:22px;display:block}
 .note.tip{background:#e7f6ff;border-color:#b6e0fb;color:#1f5e88}
 .note.warn{background:#fff4e2;border-color:#f3d7a3;color:#8a5a14}
 .note.key{background:#f1ecff;border-color:#d6c8ff;color:#5b3fb0}
@@ -369,6 +370,34 @@ details[open] summary{border-bottom:2px solid var(--line);background:#fff}
 @keyframes sprite-play{to{background-position-x:calc(var(--h,64px) * var(--ar,1) * var(--n,4) * -1)}}
 .spr.scroll{animation:none!important}   /* frames advanced by scroll (app.js) */
 @media (prefers-reduced-motion:reduce){ .spr{animation:none!important;background-position:0 0!important} }
+
+/* practice / deliverable block (end of each module) */
+.section.practice{border-color:#a9e6cf;background:linear-gradient(160deg,#f3fbf7,#fff)}
+.section.practice h2{color:#1f7a59}
+.section.practice h2 .pic,.section.start h2 .pic{width:22px;height:22px;flex:0 0 auto}
+.deliverable{display:flex;gap:12px;align-items:flex-start;margin:12px 0 8px;padding:14px 16px;
+  background:#fff;border:2px solid #a9e6cf;border-radius:14px}
+.deliverable .dv-ic{flex:0 0 auto}
+.deliverable .dv-ic svg{width:26px;height:26px;display:block}
+.deliverable b{font-family:var(--pixel);font-size:9px;color:#1f7a59;display:block;margin-bottom:5px}
+.deliverable p{margin:0;font-weight:700;color:var(--ink);font-size:14.5px}
+.grow{display:flex;align-items:center;gap:8px;margin-top:6px;font-weight:700;font-size:13px;color:var(--blue-deep)}
+.grow svg{width:18px;height:18px;flex:0 0 auto}
+
+/* onboarding on homepage */
+.section.start{border-color:var(--lav);background:linear-gradient(160deg,#f1ecff,#fff)}
+.section.start h2{color:var(--blue-deep)}
+.start-lead{font-weight:700;color:var(--ink);font-size:15px}
+
+/* capstone pro-track */
+.track{display:grid;gap:10px;margin:12px 0}
+.track-stage{display:flex;gap:13px;align-items:flex-start;padding:13px 15px;background:var(--panel-2);
+  border:2px solid var(--line);border-radius:14px}
+.track-stage .ts-ic{flex:0 0 auto;width:42px;height:42px;display:grid;place-items:center;background:#fff;border:2px solid var(--line);border-radius:11px}
+.track-stage .ts-ic .pic{width:26px;height:26px}
+.track-stage h4{margin:0 0 4px;font-size:15px;font-weight:900;color:var(--ink)}
+.track-stage .ts-mods{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--blue);background:var(--blue-soft);padding:2px 7px;border-radius:6px;margin-left:4px}
+.track-stage p{margin:0;font-size:13.5px;color:var(--ink-soft);font-weight:600}
 
 /* plain-language beginner callout */
 .plain{display:flex;gap:14px;align-items:center;margin:14px 0;padding:14px 18px;
