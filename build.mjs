@@ -10,8 +10,13 @@ const icon = name => RASTER.has(name)
   : px(ICONS[name] || ICONS.star);
 const mascot = (name,cls='') => `<img class="mascot ${cls}" src="assets/mascot/${name}.webp" alt="" loading="lazy">`;
 // animated sprite strip (frame-by-frame). ar = frame width/height ratio.
-const sprite = (name,ar,n,h='64px',dur='.9s') =>
-  `<span class="spr" role="img" aria-label="${name}" style="--ar:${ar};--n:${n};--h:${h};--dur:${dur};background-image:url(assets/anim/${name}.webp);animation-timing-function:steps(${n})"></span>`;
+// opt: {scroll:true} advances frames on page scroll; else auto-loops via CSS steps().
+const sprite = (name,ar,n,h='64px',opt={}) => {
+  const {scroll=false,dur='.9s',step=72}=opt;
+  const timing = scroll ? '' : `animation-timing-function:steps(${n});`;
+  const data = scroll ? ` data-step="${step}"` : '';
+  return `<span class="spr${scroll?' scroll':''}" role="img" aria-label="${name}"${data} style="--ar:${ar};--n:${n};--h:${h};--dur:${dur};background-image:url(assets/anim/${name}.webp);${timing}"></span>`;
+};
 const id = i => String(i+1).padStart(2,'0');
 const modFile = i => `module-${id(i)}.html`;
 
@@ -54,11 +59,11 @@ const sidebar = activeIdx => `
       ${MODULES.map((m,i)=>`<li><a href="${modFile(i)}" class="${i===activeIdx?'active':''} ${lockedOf(i)?'lock':''}"><span class="n">${id(i)}</span> ${esc(shortTitle(m.title))}</a></li>`).join('')}
     </ul>
     <div class="side-bonus">
-      <a href="prompts.html">&#128221; Промпты для бизнеса</a>
-      <a href="glossary.html" style="margin-top:8px">&#128214; Глоссарий</a>
-      <a href="bonus.html" style="margin-top:8px">&#127873; Бонусы</a>
+      <a href="prompts.html">${icon('chat')} Промпты для бизнеса</a>
+      <a href="glossary.html" style="margin-top:8px">${icon('memory')} Глоссарий</a>
+      <a href="bonus.html" style="margin-top:8px">${icon('star')} Бонусы</a>
     </div>
-    <div class="side-mascot">${sprite('wave',0.469,4,'74px')}<span>Ты справишься!</span></div>
+    <div class="side-mascot">${sprite('wave',0.468,4,'74px',{scroll:true,step:80})}<span>Ты справишься!</span></div>
   </div>
 </aside>`;
 
@@ -68,7 +73,7 @@ const footer = `
 <footer class="footer"><div class="wrap">
   <span class="hb">&#10084;</span> Сделано с любовью для тебя
   <span style="opacity:.6;margin-left:6px">© 2026 Code for Women</span>
-  <a href="https://docs.claude.com/en/docs/claude-code" target="_blank" rel="noopener" class="docs-link">&#128218; Официальные доки Claude Code</a>
+  <a href="https://docs.claude.com/en/docs/claude-code" target="_blank" rel="noopener" class="docs-link">${icon('memory')} Официальные доки Claude Code</a>
   <span class="socials">
     <a href="#" aria-label="heart">${px(SOCIAL.heart)}</a>
     <a href="#" aria-label="instagram">${px(SOCIAL.ig)}</a>
@@ -206,9 +211,9 @@ function buildModules(){
       <span class="ptxt">${p}%</span>
     </div>
 
-    <div class="goal panel" style="box-shadow:none"><b><span>&#127919;</span> Результат модуля</b><p>${esc(m.goal)}</p></div>
+    <div class="goal panel" style="box-shadow:none"><b><span>${icon('target')}</span> Результат модуля</b><p>${esc(m.goal)}</p></div>
 
-    ${PLAIN[i]?`<div class="plain"><span class="plain-ic">${sprite('idea',0.576,4,'72px','1.2s')}</span><div><b>Простыми словами</b><p>${PLAIN[i]}</p></div></div>`:''}
+    ${PLAIN[i]?`<div class="plain"><span class="plain-ic">${sprite('idea',0.611,4,'74px',{scroll:true,step:70})}</span><div><b>Простыми словами</b><p>${PLAIN[i]}</p></div></div>`:''}
 
     ${sections}
 
@@ -233,8 +238,8 @@ function buildBonus(){
   ${sidebar(-1)}
   <div>
     <div class="mod-head panel">
-      <div><span class="eyebrow">&#127873; Бонусы</span><h1>${esc(BONUS.title)}</h1><p class="lead">${esc(BONUS.lead)}</p></div>
-      <div class="mod-art">${sprite('heart',0.553,4,'150px','1.0s')}</div>
+      <div><span class="eyebrow">${icon('star')} Бонусы</span><h1>${esc(BONUS.title)}</h1><p class="lead">${esc(BONUS.lead)}</p></div>
+      <div class="mod-art">${sprite('heart',0.551,4,'150px',{dur:'1.9s'})}</div>
     </div>
 
     <section class="section panel"><h2><span class="hb">&#10073;</span> Финальный workflow: от идеи до продакшена</h2>
@@ -269,8 +274,8 @@ function buildCheatsheet(){
   ${sidebar(-1)}
   <div>
     <div class="mod-head panel">
-      <div><span class="eyebrow">&#9889; Cheatsheet</span><h1>Шпаргалка Claude Code</h1><p class="lead">Всё самое нужное на одном экране. Распечатай или держи открытым рядом.</p></div>
-      <div class="mod-art">${sprite('laptop',0.358,4,'150px','1.0s')}</div>
+      <div><span class="eyebrow">${icon('terminal')} Cheatsheet</span><h1>Шпаргалка Claude Code</h1><p class="lead">Всё самое нужное на одном экране. Распечатай или держи открытым рядом.</p></div>
+      <div class="mod-art">${sprite('laptop',0.711,8,'150px',{scroll:true,step:55})}</div>
     </div>
     <div class="cheatgrid">${cards}</div>
     <div class="note tip" style="margin-top:18px"><span class="ni">&#128161;</span><div>Полные объяснения каждой строки — в соответствующих модулях курса. Эта страница — быстрый справочник.</div></div>
@@ -300,8 +305,8 @@ function buildPrompts(){
   ${sidebar(-1)}
   <div>
     <div class="mod-head panel">
-      <div><span class="eyebrow">&#128221; Prompt Library</span><h1>${esc(PROMPTS.title)}</h1><p class="lead">${esc(PROMPTS.lead)}</p></div>
-      <div class="mod-art">${sprite('idea',0.576,4,'150px','1.2s')}</div>
+      <div><span class="eyebrow">${icon('chat')} Prompt Library</span><h1>${esc(PROMPTS.title)}</h1><p class="lead">${esc(PROMPTS.lead)}</p></div>
+      <div class="mod-art">${sprite('idea',0.611,4,'150px',{scroll:true,step:70})}</div>
     </div>
 
     <section class="section panel">
@@ -334,11 +339,11 @@ function buildGlossary(){
   ${sidebar(-1)}
   <div>
     <div class="mod-head panel">
-      <div><span class="eyebrow">&#128214; Глоссарий</span><h1>${esc(GLOSSARY.title)}</h1><p class="lead">${esc(GLOSSARY.lead)}</p></div>
-      <div class="mod-art">${sprite('idea',0.576,4,'150px','1.2s')}</div>
+      <div><span class="eyebrow">${icon('memory')} Глоссарий</span><h1>${esc(GLOSSARY.title)}</h1><p class="lead">${esc(GLOSSARY.lead)}</p></div>
+      <div class="mod-art">${sprite('idea',0.611,4,'150px',{scroll:true,step:70})}</div>
     </div>
     ${groups}
-    <div class="note tip"><span class="ni">&#128218;</span><div>Хочешь первоисточник? Всё это — из <a href="https://docs.claude.com/en/docs/claude-code" target="_blank" rel="noopener"><b>официальной документации Claude Code</b></a> от Anthropic.</div></div>
+    <div class="note tip"><span class="ni">${icon('memory')}</span><div>Хочешь первоисточник? Всё это — из <a href="https://docs.claude.com/en/docs/claude-code" target="_blank" rel="noopener"><b>официальной документации Claude Code</b></a> от Anthropic.</div></div>
     <nav class="pager">
       <a class="prev" href="index.html"><span>&#8592; На главную</span>Все модули</a>
       <a class="next" href="prompts.html"><span>Дальше &#8594;</span>Промпты для бизнеса</a>

@@ -221,10 +221,15 @@ body::before{
 /* mascot character art */
 .mascot{image-rendering:pixelated;display:block}
 .mascot.big{width:150px;height:150px;object-fit:contain;animation:bob 3s ease-in-out infinite}
-.side-mascot{display:flex;align-items:center;gap:8px;margin-top:14px;padding:10px;
-  background:var(--panel-2);border:2px dashed var(--lav);border-radius:12px}
+.side-mascot{display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:14px;padding:12px 10px;
+  background:var(--panel-2);border:2px dashed var(--lav);border-radius:12px;text-align:center}
 .side-mascot .mascot.side{width:46px;height:60px;object-fit:contain}
 .side-mascot span{font-weight:800;font-size:12.5px;color:var(--blue-deep)}
+/* pixel icons that replaced emojis */
+.side-bonus a .pic{width:18px;height:18px;flex:0 0 auto}
+.eyebrow .pic,.hero-eyebrow .pic,.feat-eyebrow .pic{width:14px;height:14px;vertical-align:-2px;margin-right:3px;display:inline-block}
+.goal b .pic{width:16px;height:16px;vertical-align:-3px}
+.docs-link .pic{width:15px;height:15px;vertical-align:-2px;margin-right:3px}
 .section h3{margin:18px 0 6px;font-size:16px;font-weight:900;color:var(--ink)}
 .section p{color:var(--ink-soft);font-weight:600;margin:8px 0}
 .section ul,.section ol{color:var(--ink-soft);font-weight:600;padding-left:22px}
@@ -362,6 +367,7 @@ details[open] summary{border-bottom:2px solid var(--line);background:#fff}
   animation-name:sprite-play;animation-duration:var(--dur,.9s);
   animation-iteration-count:infinite;animation-fill-mode:both}
 @keyframes sprite-play{to{background-position-x:calc(var(--h,64px) * var(--ar,1) * var(--n,4) * -1)}}
+.spr.scroll{animation:none!important}   /* frames advanced by scroll (app.js) */
 @media (prefers-reduced-motion:reduce){ .spr{animation:none!important;background-position:0 0!important} }
 
 /* plain-language beginner callout */
